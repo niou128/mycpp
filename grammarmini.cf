@@ -1,0 +1,65 @@
+-- mycpp
+--
+-- Sont déclarés dans la syntaxe :
+-- + namespace,
+-- + class,
+-- + héritage;
+-- + field (attributs/méthodes),
+-- ###
+
+comment "//";
+comment "/*" "*/";
+
+entrypoints Program;
+
+ProgramDef.         Program ::= [Namespace];
+
+-- Namespace definition
+separator Namespace "";
+NamespaceDec.       Namespace ::= "namespace" Ident "{" [Class] "}";
+
+-- Class definition
+separator Class "";
+ClassDec.           Class ::= ClassHeader "{" [Field] "}";
+
+-- Class header definition
+ClassHeaderDec.     ClassHeader ::= "class" Ident;
+ClassHeaderDecI.    ClassHeader ::= "class" Ident "inherits" ClassName;
+
+-- Class name definition
+ClassNameDec.       ClassName ::= Ident;
+
+-- Fields definition
+separator Field "";
+FieldDecAtt.        Field ::= "attribute" Ident ";";
+FieldDecMeth.       Field ::= "method" Ident "{" [Stm] Return "}";
+FieldDecMethPar.    Field ::= "method" Ident "(" [Param] ")" "{" [Stm] Return "}";
+
+-- Statements definition
+separator Stm "";
+Statement.          Stm ::= Exp ";" ;
+
+-- Expressions
+separator nonempty Ident ":";
+
+Eassign.            Exp  ::= Exp4 "=" Exp;
+EAdd.               Exp  ::= Exp "+" Exp1 ;
+ESub.               Exp  ::= Exp "-" Exp1 ;
+EMul.               Exp1 ::= Exp1 "*" Exp2 ;
+EDiv.               Exp1 ::= Exp1 "/" Exp2 ;
+EMod.               Exp1 ::= Exp1 "%" Exp2 ;
+EInt.               Exp2 ::= Integer ;
+ENewAlloc.          Exp3 ::= NewInst ;
+EVar.               Exp4 ::= [Ident] ;
+
+coercions Exp 4 ;
+
+-- Class instanciation definition
+ANewInstance.       NewInst ::= "new" Ident;
+
+-- Return definition
+ReturnExp.          Return ::= "return" Exp ";";
+
+-- Parameters definition
+separator Param ",";
+ParamDec.           Param ::= "var" Ident;
